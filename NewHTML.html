@@ -1,0 +1,268 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+        <style>
+            body{
+                background:#ffff;
+
+            }
+
+
+            .header {
+              overflow-x:hidden;
+                -webkit-animation-name: example; /* Chrome, Safari, Opera */
+                -webkit-animation-duration: 14s; /* Chrome, Safari, Opera */
+                animation-iteration-count: infinite;
+            }
+            @-webkit-keyframes example {
+                0%   {background-color: red;}
+                25%  {background-color: yellow;}
+                50%  {background-color: blue;}
+                100% {background-color: green;}
+            }
+
+
+            .fill{
+                position:relative;
+                width:100%;
+                height:100%;
+                overflow:scroll;
+            }
+            .header{
+                position:absolute;
+                right:5px;
+                left:5px;
+
+                height:250px;
+                background:#ffffcc;
+                text-align:center;
+            }
+
+            .left{
+                bottom:0px;
+                left:5px;
+                position:absolute;
+                width:250px;
+                top:255px;
+                height:700px;
+                background:blue;
+            }
+
+            .right{
+                background: #ffffcc;
+                height:700px;
+                bottom:0px;
+                position:absolute;
+                right:5px;
+                left:255px;
+                top:255px;
+                display:block;
+                text-align: center;
+                
+            }
+
+            .button {
+                position:absolute;
+                margin-top:10px;
+                margin-right:200px;
+                padding: 15px 25px;
+                font-size: 24px;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: #fff;
+                background-color: #4CAF50;
+                border: none;
+                border-radius: 15px;
+
+            }
+
+            .button:hover {
+                background-color: #3e8e41}
+
+            .button:active {
+                background-color: #3e8e41;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+
+
+
+
+
+
+            @media screen and (max-width:640px){
+                .right{
+                    text-align: center;
+                    position:absolute;
+                    right:5px;
+                    left:5px;
+                    buttom:0px;
+                    top:255px;
+                    display:none;
+
+                }
+                .left{
+                    display:none;
+                    z-index: 999;
+                }
+
+
+                .button{
+                    visibility:visible;
+
+                }
+
+            }
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height:100%;
+                background-color: black;
+
+            }
+
+            li {
+                display: block;
+                color:white;
+                padding: 8px 0 8px 16px;
+                text-decoration: none;
+            }
+
+            li:hover {
+                background-color: #4CAF50;
+                cursor: pointer;
+
+            }
+            .side-panel{
+                display:block;
+                z-index: 999;
+            }
+
+
+            .side-panel2{
+                display:none;
+
+            }
+
+            h3{
+                font:italic bold 60px/30px  lucida;
+                text-shadow: 2px 2px 5px red;
+
+            }
+            h3:hover{
+                font:italic bold 80px/30px  lucida;
+                transform: rotate(10deg);
+            }
+            body{
+                background:#ffffcc;
+                
+                
+            }
+
+           		
+
+        </style>
+
+    </head>
+    <body >
+        <div class="fill">
+            <div class="header">
+                <h3> PUSH NOTIFICATION </h3>
+
+            </div>
+            <div class="left" id="left">
+                <ul  >
+                    <li id="btn1"> <a href="hello"><h4>SEND NOTIFICATION</h4></a></li>	
+                    <li id="btn2"><h4>VIEW FILE<h4></li>
+                </ul>
+
+
+            </div>
+            <div class="right" id="right">
+                <div>
+                     <table>
+                        <tr><td>Text to Save:</td></tr>
+                        <tr>
+                            <td colspan="3">
+                                <textarea id="inputTextToSave" cols="70" rows="5"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Filename to Save As:</td>
+                            <td><input id="inputFileNameToSaveAs"></input></td>
+                            <td><button onclick="saveTextAsFile()">Save Text to File</button></td>
+                        </tr>
+                        <tr>
+                            <td>Select a File to Load:</td>
+                            <td><input type="file" id="fileToLoad"></td>
+                            <td><button onclick="loadFileAsText()">Load Selected File</button><td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+       
+        <script>
+          function saveTextAsFile()
+                    {
+                        var textToSave = document.getElementById("inputTextToSave").value;
+                        var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+                        var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+                        var fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value;
+
+                        var downloadLink = document.createElement("a");
+                        downloadLink.download = fileNameToSaveAs;
+                        downloadLink.innerHTML = "Download File";
+                        downloadLink.href = textToSaveAsURL;
+                        downloadLink.onclick = destroyClickedElement;
+                        downloadLink.style.display = "none";
+                        document.body.appendChild(downloadLink);
+
+                        downloadLink.click();
+                    }
+
+                    function destroyClickedElement(event)
+                    {
+                        document.body.removeChild(event.target);
+                    }
+
+                    function loadFileAsText()
+                    {
+                        var fileToLoad = document.getElementById("fileToLoad").files[0];
+
+                        var fileReader = new FileReader();
+                        fileReader.onload = function(fileLoadedEvent) 
+                        {
+                            var textFromFileLoaded = fileLoadedEvent.target.result;
+                            document.getElementById("inputTextToSave").value = textFromFileLoaded;
+                        };
+                        fileReader.readAsText(fileToLoad, "UTF-8");
+                    }
+         </script>
+      
+      
+      
+      <script>
+         function myclick2() {
+                var fs = require('fs');
+                var fileName = 'http://localhost/project/push-notifications-master/completed/testjson.json';
+                var file = require(fileName);
+                    var i=document.getElementById("userInput").value;
+              var obj = {data: i};
+
+               jsonfile.writeFileSync(fileName, obj);
+          
+    }</script>
+    
+    
+    
+    </body>
+
+</html>
